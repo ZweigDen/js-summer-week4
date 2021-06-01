@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+        integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <title>Document</title>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.9.1/axios.min.js'
+      integrity='sha512-Xk3wWei2TGrsh9kDSBKUMIjw/86sLUvhtnv9f7fOuIwhhiUTKz8szkWkzHthrM5Bb3Bu9idSzkxOrkzhcneuiw=='
+      crossorigin='anonymous'></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+        integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+        integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+        crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div id="app" class="container pt-5">
+        <button type="button" class="btn btn-danger" @click="logOut">登出</button>
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-xl"
+            @click="openModel(true)">新建</button>
+        <!-- Modal -->
+        <product-modal :temp-product="tempProduct" @update-product="updateProduct"></product-modal>
+        <section>
+            <table class="table mt-4">
+                <thead>
+                    <tr>
+                        <th>產品名稱</th>
+                        <th width="120">
+                            原價
+                        </th>
+                        <th width="120">
+                            售價
+                        </th>
+                        <th width="100">
+                            啟用
+                        </th>
+                        <th width="100">
+                            修改
+                        </th>
+                        <th width="100">
+                            刪除
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="item in products" :key="item.id" :data-id="item.id">
+                        <td>{{ item.title }}</td>
+                        <td>{{ item.origin_price }}</td>
+                        <td>{{ item.price }}</td>
+                        <td><span v-if="item.is_enabled" class="text-success">啟用</span>
+                            <span v-else>未啟用</span>
+                        </td>
+                        <td><button type="button" class='btn btn-outline-dark' @click="openModel(false, item)" data-toggle="modal"
+                                data-target=".bd-example-modal-xl">修改</button></td>
+                        <td><button type="button" class="btn btn-outline-danger" data-toggle="modal"
+                                data-target=".bd-example-modal-sm" @click="checkDel(item)">刪除</button></td>
+                    </tr>
+                </tbody>
+                <div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog"
+                    aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-sm">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalCenterTitle">是否刪除該產品？</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                產品：{{ tempProduct.title }}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal"
+                                    @click="delProduct">確定刪除</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </table>
+        </section>
+        <div class="d-flex justify-content-center">
+            <pagination :page="pagination" @get-product="getData"></pagination>
+        </div>
+    </div>
+    <script src="assets/js/products.js" type="module"></script>
+</body>
+
+</html>
